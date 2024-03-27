@@ -85,4 +85,24 @@ public String toString() {
             + ", emp_city=" + emp_city + "]";
 }
 
+public Object getAge() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getAge'");
+}
+
+public void setAge(Object age) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setAge'");
+}
+
+public Object getName() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getName'");
+}
+
+public void setName(Object name) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setName'");
+}
+
 }

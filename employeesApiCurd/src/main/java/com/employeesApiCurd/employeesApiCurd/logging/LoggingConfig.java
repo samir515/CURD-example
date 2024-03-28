@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LoggingConfig {
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(LoggingConfig.class);
 
-    // You can configure logging settings here if needed
-    // For example:
-    // logger.info("Logging configuration initialized.");
+    // configure logging settings here if needed
+
 }

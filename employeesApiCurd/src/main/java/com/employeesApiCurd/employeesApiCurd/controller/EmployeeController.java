@@ -32,7 +32,7 @@ public class EmployeeController {
     @ResponseBody
     public String createNewEmployee(@RequestBody Employee employee) {
         employeeRepository.save(employee);
-        return "alll ok";
+        return "data inserted sucessfully";
     }
 
     // Endpoint to get all employees

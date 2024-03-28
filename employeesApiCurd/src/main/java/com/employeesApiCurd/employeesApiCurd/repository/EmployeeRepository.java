@@ -4,8 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.employeesApiCurd.employeesApiCurd.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long > {
-    //EmployeeRepository employeeRepository ;
-
-    void save(String string);
 
 }

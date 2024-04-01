@@ -6,7 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -27,54 +33,4 @@ public class Employee {
     @Column(name  = "emp_city")
     private String emp_city;
 
-    // Constructor
-    public Employee() {
-    }
-
-    // Getters and Setters
-    public long getEmpid() {
-        return empid;
-    }
-
-    public void setEmpid(long empid) {
-        this.empid = empid;
-    }
-
-    public String getEmp_name() {
-        return emp_name;
-    }
-
-    public void setEmp_name(String emp_name) {
-        this.emp_name = emp_name;
-    }
-
-    public float getEmp_salary() {
-        return emp_salary;
-    }
-
-    public void setEmp_salary(float emp_salary) {
-        this.emp_salary = emp_salary;
-    }
-
-    public int getEmp_age() {
-        return emp_age;
-    }
-
-    public void setEmp_age(int emp_age) {
-        this.emp_age = emp_age;
-    }
-
-    public String getEmp_city() {
-        return emp_city;
-    }
-
-    public void setEmp_city(String emp_city) {
-        this.emp_city = emp_city;
-    }
-
-    // toString method
-    @Override
-    public String toString() {
-        return "Employee [empid=" + empid + ", emp_name=" + emp_name + ", emp_salary=" + emp_salary + ", emp_age=" + emp_age+ ", emp_city=" + emp_city + "]";
-    }
 }

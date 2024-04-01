@@ -1,91 +1,68 @@
 package com.employeesApiCurd.employeesApiCurd.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.employeesApiCurd.employeesApiCurd.controller.request.EmployeeRequest;
+import com.employeesApiCurd.employeesApiCurd.model.Employee;
+import com.employeesApiCurd.employeesApiCurd.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.employeesApiCurd.employeesApiCurd.model.Employee;
-import com.employeesApiCurd.employeesApiCurd.repository.EmployeeRepository;
+import java.util.List;
 
-@Controller
-@RequestMapping("/api")
+@RestController
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
 
-    // Endpoint to create a new employee
-    @PostMapping("/employees")
-    @ResponseBody
-    public String createNewEmployee(@RequestBody Employee employee) {
-        employeeRepository.save(employee);
-        return "data inserted sucessfully";
+    @PostMapping
+    public ResponseEntity<String> createNewEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        employeeService.addEmployee(employeeRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
     }
 
-    // Endpoint to get all employees
-    @GetMapping("/employees")
+    @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employeeList = new ArrayList<>();
-        employeeRepository.findAll().forEach(employeeList::add);
-        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+        List<Employee> employees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees);
     }
 
-    // Endpoint to get an employee by their ID
-    @GetMapping("/employees/{empid}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable long empid){
-        Optional<Employee> emp = employeeRepository.findById(empid);
-        if (emp.isPresent()){
-            return new ResponseEntity<>(emp.get(),HttpStatus.FOUND);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    // Endpoint to update an employee by their ID
-    @PutMapping("/employees/{empid}")
-    @ResponseBody
-    public String updateEmployeeById(@PathVariable long empid, @RequestBody Employee employee) {
-        Optional<Employee> emp = employeeRepository.findById(empid);
-        if (emp.isPresent()) {
-            Employee existEmp = emp.get();
-            existEmp.setEmp_age(employee.getEmp_age());
-            existEmp.setEmp_city(employee.getEmp_city());
-            existEmp.setEmp_name(employee.getEmp_name());
-            existEmp.setEmp_salary(employee.getEmp_salary());
-            employeeRepository.save(existEmp);
-            return "Employee Details against Id " + empid + " updated";
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
+        Employee employee = employeeService.getEmployeeById(id);
+        if (employee != null) {
+            return ResponseEntity.ok(employee);
         } else {
-            return "Employee Details do not exist for ID " + empid;
+            return ResponseEntity.notFound().build();
         }
     }
 
-    // Endpoint to delete an employee by their ID
-    @DeleteMapping("/employees/{empid}")
-    @ResponseBody
-    public String deleteEmployeeByEmpid(@PathVariable long empid){
-        employeeRepository.deleteById(empid);
-        return "employee deleted ";
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateEmployeeById(@PathVariable("id") long id, @RequestBody Employee employee) {
+        try {
+            employeeService.updateEmployee(id, employee);
+            return ResponseEntity.ok("Employee updated successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Endpoint to delete all employees
-    @DeleteMapping("/employees")
-    @ResponseBody
-    public String deleteAllEmployee(){
-        employeeRepository.deleteAll();
-        return "employee table data deleted sucessfully";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployeeByEmpid(@PathVariable("id") long id) {
+        try {
+            employeeService.deleteEmployee(id);
+            return ResponseEntity.ok("Employee deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllEmployee() {
+        employeeService.deleteAllEmployees();
+        return ResponseEntity.ok("All employees deleted successfully");
     }
 }
